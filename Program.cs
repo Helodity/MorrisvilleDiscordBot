@@ -7,7 +7,6 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
 using System.ComponentModel;
-using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace MorrisvilleDiscordBot
@@ -110,7 +109,7 @@ namespace MorrisvilleDiscordBot
             //Create the modal to send to the user
             var codeInput = new DiscordTextInputComponent("codeInput");
             DiscordModalBuilder modal = new DiscordModalBuilder()
-                .WithTitle("Morrisville Verification")
+                .WithTitle($"{context.Guild.Name} Verification")
                 .AddTextInput(codeInput, "Verification Code", "Check your email and place the code here.")
                 .WithCustomId($"verificationPrompt[{context.User.Id}]");
 
@@ -121,7 +120,7 @@ namespace MorrisvilleDiscordBot
             Random random = new();
             string verificationCode = new string(Enumerable.Repeat(validCharacters, 8)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
-            if (EmailInterface.SendVerificationEmail(email, verificationCode))
+            if (EmailInterface.SendVerificationEmail(email, context.Guild.Name, verificationCode))
             {    
                 //Wait for the user to put the code into the modal
                 var modalResponse = await interactivity.WaitForModalAsync($"verificationPrompt[{context.User.Id}]", TimeSpan.FromMinutes(15));
@@ -165,7 +164,6 @@ namespace MorrisvilleDiscordBot
             await context.RespondAsync(responseBuilder);
         }
     }
-
 
     public class DeverifyAllMembers
     {

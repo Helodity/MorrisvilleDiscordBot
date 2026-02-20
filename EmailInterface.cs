@@ -5,12 +5,12 @@ namespace MorrisvilleDiscordBot
 {
     internal static class EmailInterface
     {
-        public static bool SendVerificationEmail(string emailTo, string verificationID)
+        public static bool SendVerificationEmail(string emailTo, string serverName, string verificationID)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Morrisville Discord Server Verification", Program.config.EmailFrom));
+            message.From.Add(new MailboxAddress($"{serverName} Verification", Program.config.EmailFrom));
             message.To.Add(new MailboxAddress("", emailTo));
-            message.Subject = $"Your Morrisville Discord server verification code is: {verificationID}";
+            message.Subject = $"Your verification code for {serverName} is: {verificationID}";
             message.Body = new TextPart("plain")
             {
                 Text = $"To verify your account, please use the following code: {verificationID}"
