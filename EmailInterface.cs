@@ -1,42 +1,40 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace MorrisvilleDiscordBot
 {
     internal static class EmailInterface
     {
-        //Sends a verification email to the given Email Address
-        //Returns whether the email was sent successfully.
-        public static bool SendVerificationEmail(string emailAddress, string verificationID)
+        public static bool SendVerificationEmail(string emailTo, string verificationID)
         {
-            // Create the verification email.
-            MailMessage message = new MailMessage(
-                Program.config.EmailFrom,
-                emailAddress,
-                "Morrisville Discord Server Verification", //Subject
-                $"To verify your account, please use the following code: {verificationID}"); //Contents
-
-            //Configure the smtpClient
-            SmtpClient client = new SmtpClient(Program.config.SmtpHost);
-            client.Credentials = new NetworkCredential(Program.config.EmailUsername, Program.config.EmailPassword);
-            client.EnableSsl = true;
-            client.Port = Program.config.SmtpPort;
-
-            //Attempt to send the email, log any errors if so
-            try
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Morrisville Discord Server Verification", Program.config.EmailFrom));
+            message.To.Add(new MailboxAddress("", emailTo));
+            message.Subject = $"Your Morrisville Discord server verification code is: {verificationID}";
+            message.Body = new TextPart("plain")
             {
-                client.Send(message);
-            }
-            catch (Exception ex)
+                Text = $"To verify your account, please use the following code: {verificationID}"
+            };
+
+            using (var client = new SmtpClient())
             {
-                Console.WriteLine("Exception caught in CreateMessageWithAttachment(): {0}",
-                    ex.ToString());
-                return false;
+                try
+                {
+                    client.Connect(Program.config.SmtpHost, Program.config.SmtpPort, true);
+                    client.Authenticate(Program.config.AccountUsername, Program.config.AccountPassword);
+                    client.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    client.Disconnect(true);
+                }
             }
             return true;
         }
-
-
-
     }
 }

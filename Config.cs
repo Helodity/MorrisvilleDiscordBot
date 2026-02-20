@@ -12,11 +12,11 @@ namespace MorrisvilleDiscordBot
         [JsonProperty("email_from")]
         public readonly string EmailFrom;
 
-        [JsonProperty("email_username")]
-        public readonly string EmailUsername;
+        [JsonProperty("account_username")]
+        public readonly string AccountUsername;
 
-        [JsonProperty("email_password")]
-        public readonly string EmailPassword;
+        [JsonProperty("account_password")]
+        public readonly string AccountPassword;
 
         [JsonProperty("smtp_host")]
         public readonly string SmtpHost;
