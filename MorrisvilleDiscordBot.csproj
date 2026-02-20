@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02572" />
+    <PackageReference Include="DSharpPlus.Commands" Version="5.0.0-nightly-02572" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="5.0.0-nightly-02572" />
+    <PackageReference Include="MailKit" Version="4.15.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
+  </ItemGroup>
+
+</Project>
