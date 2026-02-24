@@ -141,7 +141,12 @@ namespace MorrisvilleDiscordBot
                         );
                     }
                 }
-
+            } else
+            {
+                //Failed to send email address
+                DiscordInteractionResponseBuilder errorBuilder =
+                    new DiscordInteractionResponseBuilder().WithContent("Failed to send Email!").AsEphemeral();
+                await context.RespondAsync(errorBuilder);
             }
         }
     }
