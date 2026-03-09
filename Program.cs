@@ -75,8 +75,16 @@ namespace MorrisvilleDiscordBot
         [RequireGuild]
         public static async ValueTask ExecuteAsync(SlashCommandContext context, string email)
         {
+            if(!Program.serverConfig.guildRoleMappings.TryGetValue(context.Guild.Id, out _)) {
+                DiscordInteractionResponseBuilder errorBuilder =
+                    new DiscordInteractionResponseBuilder().WithContent("This server does not have a verified role setup! Please contact an admin.").AsEphemeral();
+                await context.RespondAsync(errorBuilder);
+                return;
+            }
+
+
             //Ensure user isn't already verified
-            if(context.Member.Roles.Contains(await context.Guild.GetRoleAsync(Program.serverConfig.guildRoleMappings[context.Guild.Id])))
+            if (context.Member.Roles.Contains(await context.Guild.GetRoleAsync(Program.serverConfig.guildRoleMappings[context.Guild.Id])))
             {
                 DiscordInteractionResponseBuilder errorBuilder =
                     new DiscordInteractionResponseBuilder().WithContent("You are already verified!").AsEphemeral();
@@ -141,12 +149,6 @@ namespace MorrisvilleDiscordBot
                         );
                     }
                 }
-            } else
-            {
-                //Failed to send email address
-                DiscordInteractionResponseBuilder errorBuilder =
-                    new DiscordInteractionResponseBuilder().WithContent("Failed to send Email!").AsEphemeral();
-                await context.RespondAsync(errorBuilder);
             }
         }
     }
