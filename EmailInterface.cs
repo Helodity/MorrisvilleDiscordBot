@@ -12,12 +12,12 @@ namespace MorrisvilleDiscordBot
                 try
                 {
                     var message = new MimeMessage();
-                    message.From.Add(new MailboxAddress($"{serverName} Verification", Program.config.EmailFrom));
+                    message.From.Add(new MailboxAddress(null, Program.config.EmailFrom));
                     message.To.Add(new MailboxAddress("", emailTo));
-                    message.Subject = $"Your verification code for {serverName} is: {verificationID}";
+                    message.Subject = $"Verify Email Address for {serverName}";
                     message.Body = new TextPart("plain")
                     {
-                        Text = $"To verify your account, please use the following code: {verificationID}"
+                        Text = $"Hello! We need to make sure you're a part of this community! Please use the following code to verify your address: {verificationID}"
                     };
 
                     client.Connect(Program.config.SmtpHost, Program.config.SmtpPort, true);
