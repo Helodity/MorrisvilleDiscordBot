@@ -24,8 +24,8 @@ namespace MorrisvilleDiscordBot
             DiscordClientBuilder builder = 
             DiscordClientBuilder.CreateDefault(
                 config.Token, 
-                DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers
-            );
+                DiscordIntents.All
+            ).SetLogLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
 
             //Add the commands
             builder.UseCommands((IServiceProvider serviceProvider, CommandsExtension extension) =>
@@ -188,7 +188,8 @@ namespace MorrisvilleDiscordBot
             DiscordRole role = await context.Guild.GetRoleAsync(Program.serverConfig.guildRoleMappings[context.Guild.Id]);
             foreach (DiscordMember member in context.Guild.Members.Values)
             {
-                await context.Member.RevokeRoleAsync(role);
+                Console.WriteLine($"Deverifying {member.DisplayName}");
+                await member.RevokeRoleAsync(role);
             }
         }
     }
